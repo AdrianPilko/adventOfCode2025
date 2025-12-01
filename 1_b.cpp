@@ -44,6 +44,9 @@ int main(int argc, char *argv[])
     int current = start;
     int zeros = 0;
 
+    const int numberIterTodo = 20000;
+    int iterDone = 0;
+
     if (argc != 2)
     {
         cerr << "Error must have data filename" << endl;
@@ -55,21 +58,25 @@ int main(int argc, char *argv[])
         
     if (readFile(filename, data))
     {
-
+        cout << " current= " << current << " zeros=" << zeros << endl;
         for (auto& d : data)
         {
+            iterDone++;
+            if (iterDone > numberIterTodo) break;
+
             cout << d.lr << " " << d.num << " ";           
 
-            int completeRot = d.num / max;
-            int leftOverRot = d.num % (max-1);
+            int completeRot = d.num / 100;
+            int leftOverRot = d.num % 100;
 
 
             if (d.lr == 'L')            
             {               
                 //if (current - d.num < 0)
-                if (current - leftOverRot < 0)
-                {                               
-                    if (current != 0) zeros++;
+                if (current - leftOverRot < 0) // this means it's gone past zero
+                {                             
+                    // we already counted the zero in last iteration  
+                    if (current!= 0) zeros++; 
                     current = (current - leftOverRot) + max;                     
                     cout << "L wrap zero " << leftOverRot;                    
                 }
@@ -85,6 +92,7 @@ int main(int argc, char *argv[])
                     cout << "L normal";
                 }                
                 zeros += completeRot;
+                if (completeRot != 0) cout << " added an extra " << completeRot << " zeros now=" <<zeros << endl;
             }
             else if (d.lr == 'R')
             {
@@ -105,8 +113,9 @@ int main(int argc, char *argv[])
                 {
                     current = (current + leftOverRot); 
                     cout << "R normal";
-                }
+                }                
                 zeros += completeRot;
+                if (completeRot != 0) cout << " added an extra " << completeRot << " zeros now=" <<zeros << endl;
             }
             else
             {
