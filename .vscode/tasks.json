@@ -1,0 +1,100 @@
+{
+    // VS Code Tasks configuration for building C++ files.
+    // Saves the compiled binaries into a "bin" folder at the workspace root.
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Build (g++)",
+            "type": "shell",
+            "command": "g++",
+            "args": [
+                "-g",
+                "-IC:/Program Files/w64devkit/include",
+                "-std=c++20",
+                "-O2",
+                "-Wall",
+                "-Wextra",
+                "-Wpedantic",
+                "-o",                
+                "${workspaceFolder}/${fileBasenameNoExtension}",
+                "${file}"
+            ],
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "panel": "shared",
+                "clear": true
+            },
+            "problemMatcher": ["$gcc"],
+            "group": { "kind": "build", "isDefault": true },
+            "detail": "Compile the active C++ file with g++"
+        },
+
+        {
+            "label": "Build (clang++)",
+            "type": "shell",
+            "command": "clang++",
+            "args": [
+                "-g",
+                "-std=c++20",
+                "-O2",
+                "-Wall",
+                "-Wextra",
+                "-Wpedantic",
+                "-o",
+                "${workspaceFolder}/bin/${fileBasenameNoExtension}",
+                "${file}"
+            ],
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "panel": "shared",
+                "clear": true
+            },
+            "problemMatcher": ["$gcc"],
+            "detail": "Compile the active C++ file with clang++"
+        },
+
+        {
+            "label": "Build (MSVC cl)",
+            "type": "shell",
+            // This runs the cl.exe compiler from a VS Developer Command Prompt.
+            // Ensure you run VS Code from a developer prompt or call vcvarsall before using this task.
+            "command": "cmd",
+            "args": [
+                "/c",
+                "cl",
+                "/EHsc",
+                "/W4",
+                "/Fe:${workspaceFolder}\\bin\\${fileBasenameNoExtension}.exe",
+                "${file}"
+            ],
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "panel": "shared",
+                "clear": true
+            },
+            "problemMatcher": ["$msCompile"],
+            "detail": "Compile the active C++ file with MSVC cl (requires developer environment)"
+        },
+
+        {
+            "label": "Clean bin",
+            "type": "shell",
+            "command": "powershell",
+            "args": [
+                "-NoProfile",
+                "-Command",
+                "if (Test-Path -LiteralPath '${workspaceFolder}\\bin') { Remove-Item -Recurse -Force '${workspaceFolder}\\bin' }"
+            ],
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "panel": "shared",
+                "clear": false
+            },
+            "problemMatcher": []
+        }
+    ]
+}
